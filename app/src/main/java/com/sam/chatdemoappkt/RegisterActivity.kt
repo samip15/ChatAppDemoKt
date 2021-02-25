@@ -3,8 +3,10 @@ package com.sam.chatdemoappkt
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.google.firebase.auth.FirebaseAuth
@@ -30,6 +32,8 @@ class RegisterActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         val registerBtn = findViewById<Button>(R.id.register_btn)
         registerBtn.setOnClickListener {
+            val progressBar = findViewById<ProgressBar>(R.id.progressBar_cyclic)
+            progressBar.visibility = View.VISIBLE
             registerUser()
         }
     }
@@ -65,10 +69,12 @@ class RegisterActivity : AppCompatActivity() {
                         userHashMap["search"] = userName.toLowerCase()
                         userHashMap["facebook"] = "https://m.facebook.com"
                         userHashMap["instagram"] = "https//m.instagram.com"
-                        userHashMap["username"] = "https://www.google.com"
+                        userHashMap["website"] = "https://www.google.com"
                         refUser.updateChildren(userHashMap)
                             .addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
+                                    val progressBar = findViewById<ProgressBar>(R.id.progressBar_cyclic)
+                                    progressBar.visibility = View.INVISIBLE
                                     val intent = Intent(this,MainActivity::class.java)
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                     startActivity(intent)

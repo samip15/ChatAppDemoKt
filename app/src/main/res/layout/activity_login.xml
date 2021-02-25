@@ -40,9 +40,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/password_login"
-            android:text="Register"
+            android:hint="Password"
+            android:inputType="textPassword"
             android:textColor="@color/white"
             android:textColorHint="@color/white"/>
+        <ProgressBar
+            android:id="@+id/progressBar_cyclic"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="40dp"
+            android:minWidth="40dp"
+            android:layout_gravity="center"
+            />
         <Button
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"

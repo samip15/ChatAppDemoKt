@@ -3,8 +3,10 @@ package com.sam.chatdemoappkt
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.google.firebase.auth.FirebaseAuth
@@ -29,6 +31,8 @@ class LoginActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         val loginBtn = findViewById<Button>(R.id.login_btn)
         loginBtn.setOnClickListener {
+            val progressBar = findViewById<ProgressBar>(R.id.progressBar_cyclic)
+            progressBar.visibility = View.VISIBLE
             loginUser()
         }
     }
@@ -47,6 +51,8 @@ class LoginActivity : AppCompatActivity() {
                 .addOnCompleteListener{
                     task ->
                     if (task.isSuccessful){
+                        val progressBar = findViewById<ProgressBar>(R.id.progressBar_cyclic)
+                        progressBar.visibility = View.INVISIBLE
                         val intent = Intent(this,MainActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         startActivity(intent)

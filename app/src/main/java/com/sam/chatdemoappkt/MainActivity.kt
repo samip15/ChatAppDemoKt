@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -12,15 +14,23 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.*
 import com.sam.chatdemoappkt.fragments.ChatsFragment
 import com.sam.chatdemoappkt.fragments.SearchFragment
 import com.sam.chatdemoappkt.fragments.SettingsFragment
+import com.sam.chatdemoappkt.modelClasses.Users
+import com.squareup.picasso.Picasso
 
 
 class MainActivity : AppCompatActivity() {
+    var refUsers: DatabaseReference? = null
+    var firebaseUser: FirebaseUser? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        firebaseUser = FirebaseAuth.getInstance().currentUser
+        refUsers = FirebaseDatabase.getInstance("https://chatappkt-48d92-default-rtdb.firebaseio.com/").reference.child("users").child(firebaseUser!!.uid)
         val toolbar = findViewById<Toolbar>(R.id.toolBar)
         setSupportActionBar(toolbar)
         supportActionBar!!.title = ""
@@ -32,6 +42,23 @@ class MainActivity : AppCompatActivity() {
         viewPagerAdapter.addFragment(SettingsFragment(),"Settings")
         viewPager.adapter = viewPagerAdapter
         tabLayout.setupWithViewPager(viewPager)
+        // display the username and profile picture
+        refUsers!!.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(p0: DataSnapshot) {
+                if (p0.exists()){
+                    val user: Users? = p0.getValue(Users::class.java)
+                    val userNam = findViewById<TextView>(R.id.user_name)
+                    userNam.text = user!!.getUserName()
+                    val profile = findViewById<ImageView>(R.id.profile_image)
+                    Picasso.get().load("gs://chatappkt-48d92.appspot.com/download.png").placeholder(R.drawable.ic_person).into(profile)
+                }
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+        } )
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

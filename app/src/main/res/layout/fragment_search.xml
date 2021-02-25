@@ -4,13 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.SearchFragment">
-
-    <TextView
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchUsersEt"
+        android:layout_margin="6dp"
+        android:hint="Search users here...."/>
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Search"
-        android:textSize="30sp"
-        android:gravity="center"
-        android:textStyle="bold" />
+        android:id="@+id/searchList"
+        android:layout_below="@+id/searchUsersEt"/>
+
 
 </RelativeLayout>
