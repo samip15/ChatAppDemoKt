@@ -7,16 +7,14 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
@@ -32,9 +30,21 @@ class MessageChatActivity : AppCompatActivity() {
     var chatsAdapter: ChatsAdapter? = null
     var mChatList: List<Chat>? = null
     lateinit var recyclerViewChats : RecyclerView
+    var reference: DatabaseReference? = null
+    var seenListner: ValueEventListener? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_message_chat)
+        val toolbar: Toolbar = findViewById(R.id.toolBar_message_chat)
+        setSupportActionBar(toolbar)
+        supportActionBar!!.title = ""
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener {
+            val intent = Intent(this,WelcomeActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
+            finish()
+        }
         intent = intent
         userIdVisit = intent.getStringExtra("visit_id")
         firebaseUser = FirebaseAuth.getInstance().currentUser
@@ -44,12 +54,11 @@ class MessageChatActivity : AppCompatActivity() {
         linearLayoutManager.stackFromEnd = true
         recyclerViewChats.layoutManager = linearLayoutManager
 
-        val reference =
-            FirebaseDatabase.getInstance("https://chatappkt-48d92-default-rtdb.firebaseio.com/")
+        reference = FirebaseDatabase.getInstance("https://chatappkt-48d92-default-rtdb.firebaseio.com/")
                 .reference
                 .child("Users")
                 .child(userIdVisit)
-        reference.addValueEventListener(object : ValueEventListener {
+        reference!!.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 if (p0.exists()){
                     val user: Users? = p0.getValue(Users::class.java)
@@ -90,7 +99,9 @@ class MessageChatActivity : AppCompatActivity() {
             intent.type = "image/*"
             startActivityForResult(Intent.createChooser(intent, "Pick Image"), 111)
         }
+        seenMessage(userIdVisit)
     }
+
     private fun sendMessageToUser(senderId: String, receiverId: String?, message: String) {
         val reference =
             FirebaseDatabase.getInstance("https://chatappkt-48d92-default-rtdb.firebaseio.com/")
@@ -205,5 +216,30 @@ class MessageChatActivity : AppCompatActivity() {
             override fun onCancelled(p0: DatabaseError) {
             }
         } )
+    }
+    private fun seenMessage(userId: String){
+        val reference = FirebaseDatabase
+            .getInstance("https://chatappkt-48d92-default-rtdb.firebaseio.com/")
+            .reference.child("Chats")
+        seenListner = reference!!.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(p0: DataSnapshot) {
+                for (dataSnapshot in p0.children){
+                    val chat = dataSnapshot.getValue(Chat::class.java)
+                    if (chat!!.getReceiver().equals(firebaseUser!!.uid) && chat!!.getSender().equals(userId)){
+                        val hashMap = HashMap<String,Any>()
+                        hashMap["isSeen"] = true
+                        dataSnapshot.ref.updateChildren(hashMap)
+                    }
+                }
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+            }
+        })
+    }
+
+    override fun onPause() {
+        super.onPause()
+        reference!!.removeEventListener(seenListner!!)
     }
 }

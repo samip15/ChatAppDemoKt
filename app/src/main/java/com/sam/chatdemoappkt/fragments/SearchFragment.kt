@@ -31,11 +31,11 @@ class SearchFragment : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_search, container, false)
         recyclerView = view.findViewById(R.id.searchList)
         recyclerView!!.setHasFixedSize(true)
-        recyclerView!!.layoutManager  = LinearLayoutManager(context)
+        recyclerView!!.layoutManager = LinearLayoutManager(context)
         mUsers = ArrayList()
         retriveAllUsers()
         val searchUserEditTxt = view.findViewById<EditText>(R.id.searchUsersEt)
-        searchUserEditTxt.addTextChangedListener(object: TextWatcher{
+        searchUserEditTxt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -45,7 +45,7 @@ class SearchFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {
             }
-        } )
+        })
         return view
     }
 
@@ -59,14 +59,14 @@ class SearchFragment : Fragment() {
             override fun onDataChange(p0: DataSnapshot) {
                 (mUsers as ArrayList<Users>).clear()
                 val searchUserEditTxt = view!!.findViewById<EditText>(R.id.searchUsersEt)
-               if (searchUserEditTxt!!.text.toString() == ""){
-                   for (snapshot in p0.children) {
-                       val user: Users? = snapshot.getValue(Users::class.java)
-                       if (!(user!!.getUID()).equals(firebaseUserID)) {
-                           (mUsers as ArrayList<Users>).add(user)
-                       }
-                   }
-               }
+                if (searchUserEditTxt!!.text.toString() == "") {
+                    for (snapshot in p0.children) {
+                        val user: Users? = snapshot.getValue(Users::class.java)
+                        if (!(user!!.getUID()).equals(firebaseUserID)) {
+                            (mUsers as ArrayList<Users>).add(user)
+                        }
+                    }
+                }
                 userAdapter = UserAdapter(context!!, mUsers!!, false)
                 recyclerView!!.adapter = userAdapter
             }
@@ -87,7 +87,7 @@ class SearchFragment : Fragment() {
                 ).orderByChild("search")
                 .startAt(str)
                 .endAt(str + "\uf8ff")
-        queryUsers.addValueEventListener(object:  ValueEventListener{
+        queryUsers.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 (mUsers as ArrayList<Users>).clear()
                 for (snapshot in p0.children) {
@@ -96,7 +96,7 @@ class SearchFragment : Fragment() {
                         (mUsers as ArrayList<Users>).add(user)
                     }
                 }
-                if (p0.exists()){
+                if (p0.exists()) {
                     userAdapter = UserAdapter(context!!, mUsers!!, false)
                     recyclerView!!.adapter = userAdapter
                 }
