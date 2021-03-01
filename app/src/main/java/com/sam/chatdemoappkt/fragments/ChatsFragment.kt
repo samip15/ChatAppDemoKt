@@ -13,6 +13,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.iid.FirebaseInstanceId
+import com.sam.chatdemoappkt.Notification.Token
 import com.sam.chatdemoappkt.R
 import com.sam.chatdemoappkt.adapterClasses.UserAdapter
 import com.sam.chatdemoappkt.modelClasses.ChatList
@@ -53,7 +55,17 @@ class ChatsFragment : Fragment() {
 
             }
         })
+        updateToken(FirebaseInstanceId.getInstance().token)
         return view
+    }
+
+    private fun updateToken(token: String?) {
+        val ref = FirebaseDatabase
+            .getInstance("https://chatappkt-48d92-default-rtdb.firebaseio.com/")
+            .reference
+            .child("Tokens")
+        val token1 = Token(token!!)
+        ref.child(firebaseUser!!.uid).setValue(token1)
     }
 
     private fun retrieveChatLists() {

@@ -24,7 +24,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService()
         val currentOnlineUser = sharedPref.getString("currentUser","none")
         val firebaseUser = FirebaseAuth.getInstance().currentUser
         if (firebaseUser!=null && sented == firebaseUser.uid){
-            if (currentOnlineUser!=null){
+            if (currentOnlineUser!=user){
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
                     sendOrioNotification(mRemoteMessage)
                 }else{
