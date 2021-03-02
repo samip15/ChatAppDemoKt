@@ -43,7 +43,8 @@
             android:layout_below="@id/show_txt_message"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="Seen" />
+            android:visibility="gone"
+            />
 
     </RelativeLayout>
 </RelativeLayout>

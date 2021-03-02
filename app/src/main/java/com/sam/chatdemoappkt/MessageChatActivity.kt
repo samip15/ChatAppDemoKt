@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -92,6 +93,8 @@ class MessageChatActivity : AppCompatActivity() {
         })
         val sendMessage = findViewById<ImageView>(R.id.send_message_btn)
         sendMessage.setOnClickListener {
+            val progressBarMessageChat = findViewById<ProgressBar>(R.id.progressBar_chat)
+            progressBarMessageChat.visibility = View.VISIBLE
             notify = true
             val message = findViewById<EditText>(R.id.text_message).text.toString()
             if (message == "") {
@@ -118,6 +121,7 @@ class MessageChatActivity : AppCompatActivity() {
     }
 
     private fun sendMessageToUser(senderId: String, receiverId: String?, message: String) {
+        val progressBarMessageChat = findViewById<ProgressBar>(R.id.progressBar_chat)
         val reference =
             FirebaseDatabase.getInstance("https://chatappkt-48d92-default-rtdb.firebaseio.com/")
                 .reference
@@ -155,6 +159,7 @@ class MessageChatActivity : AppCompatActivity() {
                         override fun onCancelled(p0: DatabaseError) {
                         }
                     })
+                    progressBarMessageChat.visibility = View.INVISIBLE
                 }
                 val userReference =
                     FirebaseDatabase.getInstance("https://chatappkt-48d92-default-rtdb.firebaseio.com/")
