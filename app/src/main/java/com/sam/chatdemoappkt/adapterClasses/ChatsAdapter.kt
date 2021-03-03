@@ -11,14 +11,12 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import com.sam.chatdemoappkt.R
 import com.sam.chatdemoappkt.ViewFullImageActivity
-import com.sam.chatdemoappkt.WelcomeActivity
 import com.sam.chatdemoappkt.modelClasses.Chat
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
@@ -186,6 +184,6 @@ class ChatsAdapter(
     }
 
     override fun getItemCount(): Int {
-        return mChatList.size
+          return mChatList!!.size ?: 0
     }
 }

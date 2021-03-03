@@ -38,7 +38,7 @@ class SettingsFragment : Fragment() {
     private val REQUEST_CODE2 = 200
 
     //    private var coverImgUrl: String? = ""
-//    private var profileImgUrl: String? = ""
+   //private var profileImgUrl: String? = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

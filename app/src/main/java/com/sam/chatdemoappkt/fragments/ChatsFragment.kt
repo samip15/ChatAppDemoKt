@@ -31,7 +31,7 @@ class ChatsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_chats, container, false)
+        val view = inflater?.inflate(R.layout.fragment_chats, container, false)
         recycler_view_chatlist = view.findViewById(R.id.recycler_view_chat_list)
         recycler_view_chatlist.setHasFixedSize(true)
         recycler_view_chatlist.layoutManager = LinearLayoutManager(context)
@@ -44,7 +44,7 @@ class ChatsFragment : Fragment() {
         ref!!.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 (usersChatList as ArrayList).clear()
-                for (dataSnapshot in p0.children){
+                for (dataSnapshot in p0.children) {
                     val chatlist = dataSnapshot.getValue(ChatList::class.java)
                     (usersChatList as ArrayList).add(chatlist!!)
                 }

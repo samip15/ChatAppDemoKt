@@ -3,6 +3,7 @@ package com.sam.chatdemoappkt
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
+import android.icu.lang.UCharacter
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -52,21 +53,12 @@ class MessageChatActivity : AppCompatActivity() {
         supportActionBar!!.title = ""
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener {
-            val intent = Intent(this, WelcomeActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(intent)
             finish()
         }
         apiService = Client.client.getClient("https://fcm.googleapis.com/")!!.create(ApiService::class.java)
         intent = intent
         userIdVisit = intent.getStringExtra("visit_id")
         firebaseUser = FirebaseAuth.getInstance().currentUser
-        recyclerViewChats = findViewById(R.id.recycler_view_chat)
-        recyclerViewChats.setHasFixedSize(true)
-        var linearLayoutManager = LinearLayoutManager(applicationContext)
-        linearLayoutManager.stackFromEnd = true
-        recyclerViewChats.layoutManager = linearLayoutManager
-
         reference =
             FirebaseDatabase.getInstance("https://chatappkt-48d92-default-rtdb.firebaseio.com/")
                 .reference
@@ -105,17 +97,10 @@ class MessageChatActivity : AppCompatActivity() {
                 ).show()
             } else {
                 sendMessageToUser(firebaseUser!!.uid, userIdVisit, message)
+                retriveMessage(firebaseUser!!.uid,userIdVisit,"gs://chatappkt-48d92.appspot.com/user images/1614151815523.jpg")
             }
             val textMessage = findViewById<EditText>(R.id.text_message)
             textMessage.setText("")
-        }
-        val attractImgFile = findViewById<ImageView>(R.id.attach_image_file_btn)
-        attractImgFile.setOnClickListener {
-            notify = true
-            val intent = Intent()
-            intent.action = Intent.ACTION_GET_CONTENT
-            intent.type = "image/*"
-            startActivityForResult(Intent.createChooser(intent, "Pick Image"), 111)
         }
         seenMessage(userIdVisit)
     }
@@ -320,6 +305,11 @@ class MessageChatActivity : AppCompatActivity() {
                         (mChatList as ArrayList<Chat>),
                         receiverImageUrl!!
                     )
+                    recyclerViewChats = findViewById(R.id.recycler_view_chat)
+                    recyclerViewChats.setHasFixedSize(true)
+                    var linearLayoutManager = LinearLayoutManager(applicationContext,RecyclerView.VERTICAL,false)
+                    linearLayoutManager.stackFromEnd = true
+                    recyclerViewChats.layoutManager = linearLayoutManager
                     recyclerViewChats.adapter = chatsAdapter
                 }
             }

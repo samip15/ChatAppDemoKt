@@ -6,24 +6,20 @@
     android:layout_height="match_parent"
     android:background="#e6e6e6"
     tools:context=".MessageChatActivity">
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/bar_layout_message_chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolBar_message_chat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary">
-
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image_mchat"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/profile" />
-
             <TextView
                 android:id="@+id/username_message"
                 android:layout_width="wrap_content"
@@ -36,14 +32,12 @@
                 android:textStyle="italic" />
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_chat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/bar_layout_message_chat"
         android:layout_above="@+id/relative_layout_bottom" />
-
     <RelativeLayout
         android:id="@+id/relative_layout_bottom"
         android:layout_width="match_parent"
@@ -51,25 +45,18 @@
         android:layout_alignParentBottom="true"
         android:background="#fff"
         android:padding="6dp">
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/attach_image_file_btn"
-            android:background="@drawable/ic_attach_file"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true" />
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/text_message"
             android:background="@android:color/transparent"
             android:hint="Write Messgae Here...."
-            android:layout_toRightOf="@id/attach_image_file_btn"
+            android:layout_toRightOf="@id/relative_layout_bottom"
             android:layout_centerVertical="true"
             android:layout_marginLeft="6dp"
             android:layout_toLeftOf="@id/send_message_btn"
-            android:layout_marginRight="6dp"/>
+            android:layout_marginRight="6dp"
+            tools:ignore="NotSibling" />
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -87,6 +74,5 @@
         android:minHeight="40dp"
         android:minWidth="40dp"
         android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        />
+        android:layout_gravity="center" />
 </RelativeLayout>

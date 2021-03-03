@@ -1,5 +1,4 @@
 package com.sam.chatdemoappkt
-
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,8 +21,6 @@ import com.sam.chatdemoappkt.fragments.SettingsFragment
 import com.sam.chatdemoappkt.modelClasses.Chat
 import com.sam.chatdemoappkt.modelClasses.Users
 import com.squareup.picasso.Picasso
-
-
 class MainActivity : AppCompatActivity() {
     var refUsers: DatabaseReference? = null
     var firebaseUser: FirebaseUser? = null
@@ -31,7 +28,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         firebaseUser = FirebaseAuth.getInstance().currentUser
-        refUsers = FirebaseDatabase.getInstance("https://chatappkt-48d92-default-rtdb.firebaseio.com/").reference.child("users").child(firebaseUser!!.uid)
+        refUsers = FirebaseDatabase
+            .getInstance("https://chatappkt-48d92-default-rtdb.firebaseio.com/")
+            .reference
+            .child("users")
+            .child(firebaseUser!!.uid)
         val toolbar = findViewById<Toolbar>(R.id.toolBar)
         setSupportActionBar(toolbar)
         supportActionBar!!.title = ""
@@ -133,5 +134,26 @@ class MainActivity : AppCompatActivity() {
         override fun getPageTitle(i: Int): CharSequence? {
             return titles[i]
         }
+    }
+    private fun updateStatus(status: String)
+    {
+      val  ref = FirebaseDatabase
+            .getInstance("https://chatappkt-48d92-default-rtdb.firebaseio.com/")
+            .reference
+            .child("")
+            .child(firebaseUser!!.uid)
+        val hasMap = HashMap<String,Any>()
+        hasMap["status"] = status
+        ref.updateChildren(hasMap)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateStatus("online")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        updateStatus("offline")
     }
 }

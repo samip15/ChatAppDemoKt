@@ -29,9 +29,6 @@ class SearchFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_search, container, false)
-        recyclerView = view.findViewById(R.id.searchList)
-        recyclerView!!.setHasFixedSize(true)
-        recyclerView!!.layoutManager = LinearLayoutManager(context)
         mUsers = ArrayList()
         retriveAllUsers()
         val searchUserEditTxt = view.findViewById<EditText>(R.id.searchUsersEt)
@@ -67,7 +64,11 @@ class SearchFragment : Fragment() {
                         }
                     }
                 }
+                recyclerView = view!!.findViewById(R.id.searchList) as RecyclerView
+                recyclerView!!.setHasFixedSize(true)
+                recyclerView!!.layoutManager = LinearLayoutManager(context,RecyclerView.VERTICAL,false)
                 userAdapter = UserAdapter(context!!, mUsers!!, false)
+                userAdapter!!.notifyDataSetChanged()
                 recyclerView!!.adapter = userAdapter
             }
 
@@ -97,7 +98,11 @@ class SearchFragment : Fragment() {
                     }
                 }
                 if (p0.exists()) {
+                    recyclerView = view!!.findViewById(R.id.searchList) as RecyclerView
+                    recyclerView!!.setHasFixedSize(true)
+                    recyclerView!!.layoutManager = LinearLayoutManager(context,RecyclerView.VERTICAL,false)
                     userAdapter = UserAdapter(context!!, mUsers!!, false)
+                    userAdapter!!.notifyDataSetChanged()
                     recyclerView!!.adapter = userAdapter
                 }
             }
